@@ -1,0 +1,4 @@
+C:\Users\Xander\Desktop\FiveMServers\BasicDevelopmentServer\resources\[custom]\flashbang\Flashbang.Client.net.dll
+C:\Users\Xander\source\repos\Flashbang\Flashbang.Client\obj\Debug\Flashbang.Client.csprojAssemblyReference.cache
+C:\Users\Xander\source\repos\Flashbang\Flashbang.Client\obj\Debug\Flashbang.Client.csproj.CoreCompileInputs.cache
+C:\Users\Xander\source\repos\Flashbang\Flashbang.Client\obj\Debug\Flashbang.Client.net.dll
