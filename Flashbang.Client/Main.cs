@@ -12,10 +12,11 @@ namespace Flashbang.Client
         private const string AnimName = "ent_anim_paparazzi_flash";
         private bool FlashbangEquipped = false;
         private const string WeaponModel = "w_ex_grenadesmoke";
+        private string[] Animation = new string[] { "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro" };
 
         public Main()
         {
-            EventHandlers.Add("Flashbang:Explode", new Action<float, float, float, int, float>(FB_Explode));
+            EventHandlers.Add("Flashbang:Explode", new Action<float, float, float, int, int, float>(FB_Explode));
             Tick += FB_Tick;
         }
 
@@ -29,10 +30,11 @@ namespace Flashbang.Client
             flashbang.Delete();
         }
 
-        private async void FB_Explode(float x, float y, float z, int time, float radius)
+        private async void FB_Explode(float x, float y, float z, int stunTime, int afterTime, float radius)
         {
-            int refTime = time * 1000;
-            int finishTime = Game.GameTime + refTime;
+            int stunRefTime = stunTime * 1000;
+            int afterRefTime = afterTime * 1000;
+            int finishTime = 0;
             Ped ped = Game.Player.Character;
             Vector3 pos = new Vector3(x, y, z);
 
@@ -42,11 +44,22 @@ namespace Flashbang.Client
             if (distance <= radius)
             {
                 Screen.Effects.Start(ScreenEffect.DontTazemeBro, 0, true);
+                GameplayCamera.Shake(CameraShake.Hand, 15f);
+                await ped.Task.PlayAnimation(Animation[0], Animation[1], -8f, -8f, -1, AnimationFlags.StayInEndFrame | AnimationFlags.UpperBodyOnly | AnimationFlags.AllowRotation, 8f);
+                finishTime = Game.GameTime + stunRefTime;
                 while (Game.GameTime < finishTime)
                 {
-                    Game.Player.Character.Ragdoll(0, RagdollType.Normal);
+                    Game.Player.DisableFiringThisFrame();
                     await Delay(0);
                 }
+                ped.Task.ClearAnimation(Animation[0], Animation[1]);
+                GameplayCamera.ShakeAmplitude = 10f;
+                finishTime = Game.GameTime + afterRefTime;
+                while (Game.GameTime < finishTime)
+                {
+                    await Delay(0);
+                }
+                GameplayCamera.StopShaking();
                 Screen.Effects.Stop(ScreenEffect.DontTazemeBro);
             }
         }

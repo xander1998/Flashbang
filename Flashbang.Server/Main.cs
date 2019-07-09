@@ -13,7 +13,7 @@ namespace Flashbang.Server
         public Main()
         {
             EventHandlers.Add("Flashbang:DispatchExplosion", new Action<float, float, float>(FB_DispatchExplosion));
-            //LoadConfig();
+            LoadConfig();
         }
 
         private void LoadConfig()
@@ -25,7 +25,7 @@ namespace Flashbang.Server
 
         private void FB_DispatchExplosion(float x, float y, float z)
         {
-            TriggerClientEvent("Flashbang:Explode", x, y, z, config.Timer, config.Range);
+            TriggerClientEvent("Flashbang:Explode", x, y, z, config.StunTime, config.AfterTime, config.Range);
         }
     }
 }

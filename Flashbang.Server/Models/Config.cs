@@ -10,8 +10,10 @@ namespace Flashbang.Server.Models
     [JsonObject]
     public class Config
     {
-        [JsonProperty("timer")]
-        public int Timer { get; protected set; } = 8;
+        [JsonProperty("stuntime")]
+        public int StunTime { get; protected set; } = 8;
+        [JsonProperty("aftertime")]
+        public int AfterTime { get; protected set; } = 8;
         [JsonProperty("range")]
         public float Range { get; protected set; } = 8f;
 
