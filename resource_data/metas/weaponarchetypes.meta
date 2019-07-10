@@ -2,8 +2,8 @@
 <CWeaponModelInfo__InitDataList>
 	<InitDatas>
 		<Item>
-			<modelName>WEAPON_MODEL_HERE</modelName>
-			<txdName>WEAPON_MODEL_HERE</txdName>
+			<modelName>w_ex_flashbang</modelName>
+			<txdName>w_ex_flashbang</txdName>
 			<ptfxAssetName>NULL</ptfxAssetName>
 			<lodDist value="50"/>
 		</Item>

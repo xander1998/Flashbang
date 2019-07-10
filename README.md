@@ -1,5 +1,8 @@
 # Flashbang
 
+# Scripted By: Xander1998 (X. Cross)
+# Model Ported & META's redone By: xRxExTxRxOx
+
 This is a flashbang script that was scripted for FiveM. Basically you just throw it and wherever it explosed it causes any player near it to collapse with some screen effects.
 
 # Known Bugs

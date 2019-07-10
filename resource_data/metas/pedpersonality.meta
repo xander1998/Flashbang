@@ -6,7 +6,7 @@
 			<UnholsterClips>
 				<Item>
 					<Weapons>
-						<Item>WEAPON_WEAPON</Item>
+						<Item>WEAPON_FLASHBANG</Item>
 					</Weapons>
 					<Clip>unarmed_holster_unarmed</Clip>
 				</Item>
@@ -17,7 +17,7 @@
 			<UnholsterClips>
 				<Item>
 					<Weapons>
-						<Item>WEAPON_WEAPON</Item>
+						<Item>WEAPON_FLASHBANG</Item>
 					</Weapons>
 					<Clip>2h_melee_holster_unarmed</Clip>
 				</Item>
@@ -28,7 +28,7 @@
 			<UnholsterClips>
 				<Item>
 					<Weapons>
-						<Item>WEAPON_WEAPON</Item>
+						<Item>WEAPON_FLASHBANG</Item>
 					</Weapons>
 					<Clip>1h_holster_unarmed</Clip>
 				</Item>
@@ -39,7 +39,7 @@
 			<UnholsterClips>
 				<Item>
 					<Weapons>
-						<Item>WEAPON_WEAPON</Item>
+						<Item>WEAPON_FLASHBANG</Item>
 					</Weapons>
 					<Clip>2h_holster_unarmed</Clip>
 				</Item>
@@ -50,7 +50,7 @@
 			<UnholsterClips>
 				<Item>
 					<Weapons>
-						<Item>WEAPON_WEAPON</Item>
+						<Item>WEAPON_FLASHBANG</Item>
 					</Weapons>
 					<Clip>mini_holster_2h_unarmed</Clip>
 				</Item>
@@ -61,7 +61,7 @@
 			<UnholsterClips>
 				<Item>
 					<Weapons>
-						<Item>WEAPON_WEAPON</Item>
+						<Item>WEAPON_FLASHBANG</Item>
 					</Weapons>
 					<Clip>unarmed_holster_unarmed</Clip>
 				</Item>
@@ -72,7 +72,7 @@
 			<UnholsterClips>
 				<Item>
 					<Weapons>
-						<Item>WEAPON_WEAPON</Item>
+						<Item>WEAPON_FLASHBANG</Item>
 					</Weapons>
 					<Clip>unarmed_holster_unarmed</Clip>
 				</Item>
@@ -83,7 +83,7 @@
 			<UnholsterClips>
 				<Item>
 					<Weapons>
-						<Item>WEAPON_WEAPON</Item>
+						<Item>WEAPON_FLASHBANG</Item>
 					</Weapons>
 					<Clip>1h_holster_unarmed</Clip>
 				</Item>
@@ -94,7 +94,7 @@
 			<UnholsterClips>
 				<Item>
 					<Weapons>
-						<Item>WEAPON_WEAPON</Item>
+						<Item>WEAPON_FLASHBANG</Item>
 					</Weapons>
 					<Clip>2h_holster_unarmed</Clip>
 				</Item>
@@ -108,7 +108,7 @@
 				<Item>
 					<Item>
 						<Weapons>
-							<Item>WEAPON_WEAPON</Item>
+							<Item>WEAPON_FLASHBANG</Item>
 						</Weapons>
 						<ClipSets>
 							<Item>
@@ -132,7 +132,7 @@
 				<Item>
 					<Item>
 						<Weapons>
-							<Item>WEAPON_WEAPON</Item>
+							<Item>WEAPON_FLASHBANG</Item>
 						</Weapons>
 						<ClipSets>
 							<Item>
@@ -161,7 +161,7 @@
 				<Item>
 					<Item>
 						<Weapons>
-							<Item>WEAPON_WEAPON</Item>
+							<Item>WEAPON_FLASHBANG</Item>
 						</Weapons>
 						<ClipSets>
 							<Item>
@@ -185,7 +185,7 @@
 				<Item>
 					<Item>
 						<Weapons>
-							<Item>WEAPON_WEAPON</Item>
+							<Item>WEAPON_FLASHBANG</Item>
 						</Weapons>
 						<ClipSets>
 							<Item>
@@ -214,7 +214,7 @@
 				<Item>
 					<Item>
 						<Weapons>
-							<Item>WEAPON_WEAPON</Item>
+							<Item>WEAPON_FLASHBANG</Item>
 						</Weapons>
 						<ClipSets>
 							<Item>
@@ -238,7 +238,7 @@
 				<Item>
 					<Item>
 						<Weapons>
-							<Item>WEAPON_WEAPON</Item>
+							<Item>WEAPON_FLASHBANG</Item>
 						</Weapons>
 						<ClipSets>
 							<Item>
@@ -267,7 +267,7 @@
 				<Item>
 					<Item>
 						<Weapons>
-							<Item>WEAPON_WEAPON</Item>
+							<Item>WEAPON_FLASHBANG</Item>
 						</Weapons>
 						<ClipSets>
 							<Item>
@@ -291,7 +291,7 @@
 				<Item>
 					<Item>
 						<Weapons>
-							<Item>WEAPON_WEAPON</Item>
+							<Item>WEAPON_FLASHBANG</Item>
 						</Weapons>
 						<ClipSets>
 							<Item>
@@ -320,7 +320,7 @@
 				<Item>
 					<Item>
 						<Weapons>
-							<Item>WEAPON_WEAPON</Item>
+							<Item>WEAPON_FLASHBANG</Item>
 						</Weapons>
 						<ClipSets>
 							<Item>
@@ -344,7 +344,7 @@
 				<Item>
 					<Item>
 						<Weapons>
-							<Item>WEAPON_WEAPON</Item>
+							<Item>WEAPON_FLASHBANG</Item>
 						</Weapons>
 						<ClipSets>
 							<Item>

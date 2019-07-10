@@ -11,13 +11,22 @@ namespace Flashbang.Client
         private const string AnimDict = "core";
         private const string AnimName = "ent_anim_paparazzi_flash";
         private bool FlashbangEquipped = false;
-        private const string WeaponModel = "w_ex_grenadesmoke";
+        private const string WeaponModel = "w_ex_flashbang";
         private string[] Animation = new string[] { "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro" };
 
         public Main()
         {
             EventHandlers.Add("Flashbang:Explode", new Action<float, float, float, int, int, float>(FB_Explode));
             Tick += FB_Tick;
+            FB_LoadWeaponEntry();
+        }
+
+        private void FB_LoadWeaponEntry()
+        {
+            if (API.IsWeaponValid(4221696920))
+            {
+                API.AddTextEntry("WT_GNADE_FLSH", "Flashbang");
+            }
         }
 
         private async void FB_Thrown(int prop)

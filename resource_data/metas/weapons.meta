@@ -24,13 +24,77 @@
 	<AimingInfos />
 	<Infos>
 		<Item>
-			<Infos />
+			<Infos>
+				<Item type="CAmmoThrownInfo">
+					<Name>AMMO_FLASH</Name>
+					<Model>w_ex_flashbang</Model>
+					<Audio />
+					<Slot />
+					<AmmoMax value="25" />
+					<AmmoMax50 value="25" />
+					<AmmoMax100 value="25" />
+					<AmmoMaxMP value="25" />
+					<AmmoMax50MP value="25" />
+					<AmmoMax100MP value="25" />
+					<AmmoFlags />
+					<Damage value="0.000000" />
+					<LifeTime value="3.000000" />
+					<FromVehicleLifeTime value="3.000000" />
+					<LifeTimeAfterImpact value="1.000000" />
+					<LifeTimeAfterExplosion value="0.000000" />
+					<ExplosionTime value="0.000000" />
+					<LaunchSpeed value="25.000000" />
+					<SeparationTime value="0.000000" />
+					<TimeToReachTarget value="0.000000" />
+					<Damping value="0.050000" />
+					<GravityFactor value="1.000000" />
+					<RicochetTolerance value="1.000000" />
+					<PedRicochetTolerance value="1.000000" />
+					<VehicleRicochetTolerance value="1.000000" />
+					<Explosion>
+						<Default>DONTCARE</Default>
+						<HitCar>DONTCARE</HitCar>
+						<HitTruck>DONTCARE</HitTruck>
+						<HitBike>DONTCARE</HitBike>
+						<HitBoat>DONTCARE</HitBoat>
+						<HitPlane>DONTCARE</HitPlane>
+					</Explosion>
+					<FuseFx />
+					<TrailFx />
+					<TrailFxUnderWater />
+					<TrailFxFadeInTime value="0.000000" />
+					<TrailFxFadeOutTime value="0.000000" />
+					<PrimedFx />
+					<DisturbFxDefault />
+					<DisturbFxSand />
+					<DisturbFxWater />
+					<DisturbFxDirt />
+					<DisturbFxFoliage />
+					<DisturbFxProbeDist value="0.000000" />
+					<DisturbFxScale value="0.000000" />
+					<LightOnlyActiveWhenStuck value="false" />
+					<LightFlickers value="false" />
+					<LightBone />
+					<LightColour x="0.000000" y="0.000000" z="0.000000" />
+					<LightIntensity value="0.000000" />
+					<LightRange value="0.000000" />
+					<LightFalloffExp value="0.000000" />
+					<LightFrequency value="0.000000" />
+					<LightPower value="0.000000" />
+					<CoronaSize value="0.000000" />
+					<CoronaIntensity value="0.000000" />
+					<CoronaZBias value="0.000000" />
+					<ProjectileFlags>ProcessImpacts CanBounce DoubleDamping</ProjectileFlags>
+					<ThrownForce value="0.000000" />
+					<ThrownForceFromVehicle value="5.000000" />
+				</Item>
+			</Infos>
 		</Item>
 		<Item>
 			<Infos>
 				<Item type="CWeaponInfo">
 					<Name>WEAPON_FLASHBANG</Name>
-					<Model>w_ex_grenadesmoke</Model>
+					<Model>w_ex_flashbang</Model>
 					<Audio />
 					<Slot>SLOT_FLASHBANG</Slot>
 					<DamageType />
@@ -45,7 +109,7 @@
 					<FireType>PROJECTILE</FireType>
 					<WheelSlot>WHEEL_THROWABLE_SPECIAL</WheelSlot>
 					<Group>GROUP_THROWN</Group>
-					<AmmoInfo ref="AMMO_SMOKEGRENADE" />
+					<AmmoInfo ref="AMMO_FLASH" />
 					<AimingInfo ref="PISTOL_2H_BASE_STRAFE" />
 					<ClipSize value="1" />
 					<AccuracySpread value="1.000000" />
@@ -209,7 +273,7 @@
 					<FirstPersonReticuleStyleHash />
 					<PickupHash>PICKUP_WEAPON_SMOKEGRENADE</PickupHash>
 					<MPPickupHash>PICKUP_WEAPON_SMOKEGRENADE</MPPickupHash>
-					<HumanNameHash>WT_GNADE_SMK</HumanNameHash>
+					<HumanNameHash>WT_GNADE_FLSH</HumanNameHash>
 					<MovementModeConditionalIdle />
 					<StatName>SMKGRENADE</StatName>
 					<KnockdownCount value="-1" />
@@ -233,11 +297,11 @@
 					<StealthFiringLeanAdditiveWeight value="0.000000" />
 					<ExpandPedCapsuleRadius value="0.000000" />
 					<AudioCollisionHash />
-					<HudDamage value="10" />
+					<HudDamage value="0" />
 					<HudSpeed value="20" />
 					<HudCapacity value="10" />
 					<HudAccuracy value="10" />
-					<HudRange value="15" />
+					<HudRange value="5" />
 				</Item>
 			</Infos>
 		</Item>
