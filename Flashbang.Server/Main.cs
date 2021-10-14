@@ -12,7 +12,7 @@ namespace Flashbang.Server
 
         public Main()
         {
-            EventHandlers.Add("Flashbang:DispatchExplosion", new Action<float, float, float>(FB_DispatchExplosion));
+            EventHandlers.Add("Flashbang:DispatchExplosion", new Action<float, float, float, int>(FB_DispatchExplosion));
             LoadConfig();
         }
 
@@ -23,9 +23,9 @@ namespace Flashbang.Server
             config = JsonConvert.DeserializeObject<Config>(json);
         }
 
-        private void FB_DispatchExplosion(float x, float y, float z)
-        {
-            TriggerClientEvent("Flashbang:Explode", x, y, z, config.StunTime, config.AfterTime, config.Range, config.Lethal, config.Damage, config.LethalRange);
+        private void FB_DispatchExplosion(float x, float y, float z, int prop)
+        {     
+            TriggerClientEvent("Flashbang:Explode", x, y, z, config.StunTime, config.AfterTime, config.Range, prop,config.Damage, config.LethalRange);
         }
     }
 }

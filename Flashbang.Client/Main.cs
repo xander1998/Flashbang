@@ -19,16 +19,13 @@ namespace Flashbang.Client
         private bool shakeCamActive = false;
         private int afterTimersRunning = 0;
         private const string WeaponModel = "w_ex_flashbang";
-        private int damage = 0;
-
-        private bool lethal = false;
 
 
         private string[] Animation = new string[] { "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro" };
 
         public Main()
         {
-            EventHandlers.Add("Flashbang:Explode", new Action<float, float, float, int, int, float, int, bool, int, float>(FB_Explode));
+            EventHandlers.Add("Flashbang:Explode", new Action<float, float, float, int, int, float, int, int, float>(FB_Explode));
             Tick += FB_Tick;
             FB_LoadWeaponEntry();
         }
@@ -155,14 +152,17 @@ namespace Flashbang.Client
             // Debuffs
             afterTimersRunning--;
             totalAfterShakeAmp -= shakeAmp;
-            enableShakeCam(capAfterShakeAmp(totalAfterShakeAmp));
 
             // Cleanup
-            if (afterTimersRunning == 0)
+            if (flashTimersRunning == 0)
             {
-                shakeCamFalloff(totalFlashShakeAmp + shakeAmp);
-                API.AnimpostfxStop("Dont_tazeme_bro");
-            } 
+                enableShakeCam(capAfterShakeAmp(totalAfterShakeAmp));
+                if ((afterTimersRunning == 0) && (flashTimersRunning == 0))
+                {
+                    shakeCamFalloff(totalFlashShakeAmp + shakeAmp);
+                    API.AnimpostfxStop("Dont_tazeme_bro");
+                } 
+            }
         }
 
         private async void flashEffect (float shakeAmp, int time, float afterShakeAmp, int afterTime)
@@ -198,21 +198,25 @@ namespace Flashbang.Client
             } 
         }
 
-        private async void checkLethalRadius(float lethRange, Vector3 pos)
+        private async void checkLethalRadius(float lethRange, float x, float y, float z, int damage)
         {   
             Ped ped = Game.Player.Character;
+            Vector3 pos = new Vector3(x, y, z);
             float distance = World.GetDistance(ped.Position, pos);
+
+            //cout("Damage: " + damage.ToString());
+            //cout("Lethal Range: " + lethRange.ToString());
+            //cout("Distance: " + distance.ToString());
 
             if (distance <= lethRange)
             {
                  API.ApplyDamageToPed(API.GetPlayerPed(-1), damage, false);
+                 cout("Applying Damage Amount: " + damage.ToString());
             }
         }
 
-        private async void FB_Explode(float x, float y, float z, int stunTime, int afterTime, float radius, int prop, bool lthl, int dmg, float lethalRange)
+        private async void FB_Explode(float x, float y, float z, int stunTime, int afterTime, float radius, int prop, int damage, float lethalRange)
         {
-            lethal = lthl;
-            damage = dmg;
             bool hit = false;
             int entityHit = 0;
             int result = 1;
@@ -279,7 +283,7 @@ namespace Flashbang.Client
 
             if ((faceDistance <= radius) && playerHit)
             {
-                checkLethalRadius(lethalRange, pos);
+                checkLethalRadius(lethalRange, x, y, z, damage);
 
                 // https://wiki.gtanet.work/index.php?title=Screen_Effects
                 //Screen.Effects.Start(ScreenEffect.DontTazemeBro, 0, true);
