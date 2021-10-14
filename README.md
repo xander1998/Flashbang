@@ -1,10 +1,10 @@
 # Flashbang
+This is a reworked version of the flashbang script.
 
 # Credits
 * Scripted By: Xander1998 (X. Cross)
 * Model Ported & META's redone By: xRxExTxRxOx
 * Forked And Edited By: Eddie (Eddbox LP)
-This is a reworked version of the flashbang script.
 
 # Changelog
 1. Explosion now checks for line of sight towards players face to trigger effects.
