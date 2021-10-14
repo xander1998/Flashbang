@@ -19,11 +19,16 @@ namespace Flashbang.Client
         private bool shakeCamActive = false;
         private int afterTimersRunning = 0;
         private const string WeaponModel = "w_ex_flashbang";
+        private int damage = 0;
+
+        private bool lethal = false;
+
+
         private string[] Animation = new string[] { "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro" };
 
         public Main()
         {
-            EventHandlers.Add("Flashbang:Explode", new Action<float, float, float, int, int, float, int>(FB_Explode));
+            EventHandlers.Add("Flashbang:Explode", new Action<float, float, float, int, int, float, int, bool, int, float>(FB_Explode));
             Tick += FB_Tick;
             FB_LoadWeaponEntry();
         }
@@ -193,19 +198,21 @@ namespace Flashbang.Client
             } 
         }
 
-        private async void checkLethalRadius()
+        private async void checkLethalRadius(float lethRange, Vector3 pos)
         {   
             Ped ped = Game.Player.Character;
             float distance = World.GetDistance(ped.Position, pos);
 
-            if (distance <= 1.6f)
+            if (distance <= lethRange)
             {
-                 API.ApplyDamageToPed(API.GetPlayerPed(-1), 25, false);
+                 API.ApplyDamageToPed(API.GetPlayerPed(-1), damage, false);
             }
         }
 
-        private async void FB_Explode(float x, float y, float z, int stunTime, int afterTime, float radius, int prop)
+        private async void FB_Explode(float x, float y, float z, int stunTime, int afterTime, float radius, int prop, bool lthl, int dmg, float lethalRange)
         {
+            lethal = lthl;
+            damage = dmg;
             bool hit = false;
             int entityHit = 0;
             int result = 1;
@@ -272,7 +279,7 @@ namespace Flashbang.Client
 
             if ((faceDistance <= radius) && playerHit)
             {
-                checkLethalRadius();
+                checkLethalRadius(lethalRange, pos);
 
                 // https://wiki.gtanet.work/index.php?title=Screen_Effects
                 //Screen.Effects.Start(ScreenEffect.DontTazemeBro, 0, true);
