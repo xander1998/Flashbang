@@ -25,7 +25,7 @@ namespace Flashbang.Server
 
         private void FB_DispatchExplosion(float x, float y, float z)
         {
-            TriggerClientEvent("Flashbang:Explode", x, y, z, config.StunTime, config.AfterTime, config.Range);
+            TriggerClientEvent("Flashbang:Explode", x, y, z, config.StunTime, config.AfterTime, config.Range, config.Lethal, config.Damage, config.LethalRange);
         }
     }
 }
