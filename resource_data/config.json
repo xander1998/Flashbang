@@ -1,5 +1,5 @@
 {
-	"stuntime" : 8,
-	"aftertime" : 8,
-	"range" : 8.0
+	"stuntime" : 1,
+	"aftertime" : 15,
+	"range" : 40.0
 }
