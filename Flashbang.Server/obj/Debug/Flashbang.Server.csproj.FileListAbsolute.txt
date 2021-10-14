@@ -1,0 +1,10 @@
+C:\Users\Xander\Desktop\FiveMServers\BasicDevelopmentServer\resources\[custom]\flashbang\Flashbang.Server.net.dll
+C:\Users\Xander\source\repos\Flashbang\Flashbang.Server\obj\Debug\Flashbang.Server.csprojAssemblyReference.cache
+C:\Users\Xander\source\repos\Flashbang\Flashbang.Server\obj\Debug\Flashbang.Server.csproj.CoreCompileInputs.cache
+C:\Users\Xander\source\repos\Flashbang\Flashbang.Server\obj\Debug\Flashbang.Server.net.dll
+C:\Users\Xander\source\repos\Flashbang\Flashbang.Server\obj\Debug\Flashbang.Server.csproj.CopyComplete
+C:\Users\eddik\Documents\Flashbang-master\Flashbang.Server\obj\Debug\Flashbang.Server.net.dll
+C:\Users\eddik\Documents\Flashbang-master\Flashbang.Server\obj\Debug\Flashbang.Server.csproj.AssemblyReference.cache
+C:\Users\eddik\Documents\Flashbang-master\Flashbang.Server\obj\Debug\Flashbang.Server.csproj.CoreCompileInputs.cache
+C:\Users\eddik\Documents\Flashbang-master\Flashbang.Server\obj\Debug\Flashbang.Server.csproj.CopyComplete
+C:\Users\eddik\Documents\Flashbang-master\Flashbang.Server.net.dll
