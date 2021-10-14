@@ -8,7 +8,7 @@
 This is a flashbang script that was scripted for FiveM. Basically you just throw it and wherever it explosed it causes any player near it to collapse with some screen effects.
 
 # Changelog (14.10.2021) by Eddie
-1. Explosion now checks for line of sight towards players face to trigger the effect respective to the player.
+1. Explosion now checks for line of sight towards players face to trigger the effect.
 2. Beeing too close to the flashbang causes damage to the player.
 3. Effect now stacks properly. That means multiple consecutive hits will increase the time and severity of the effect.
 
