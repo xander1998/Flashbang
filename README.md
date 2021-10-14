@@ -10,7 +10,7 @@ This is a flashbang script that was scripted for FiveM. Basically you just throw
 # Changelog (14.10.2021) by Eddie
 1. Explosion now checks for line of sight towards players face to trigger the effect respective to the player.
 2. Beeing too close to the flashbang causes damage to the player.
-3. Effect now stacks properly. That means multiple consecutive hits will increase the time of the effect.
+3. Effect now stacks properly. That means multiple consecutive hits will increase the time and severity of the effect.
 
 # Known Bugs
 1. Weapon is named Tear Gas (I don't know metas well enough to fix it)
