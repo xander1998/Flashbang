@@ -1,5 +1,6 @@
 --[[
 	Scripted By: Xander1998 (X. Cross)
+	Modified By: Eddie (Eddbox LP)
 	Model Ported & META's redone By: xRxExTxRxOx
 --]]
 

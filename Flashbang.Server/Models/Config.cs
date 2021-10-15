@@ -16,7 +16,10 @@ namespace Flashbang.Server.Models
         public int AfterTime { get; protected set; } = 8;
         [JsonProperty("range")]
         public float Range { get; protected set; } = 8f;
-
+        [JsonProperty("damage")]
+        public int Damage { get; protected set; } = 25; 
+        [JsonProperty("lethalrange")]
+        public float LethalRange { get; protected set; } = 1.6f; 
         public Config() { }
     }
 }

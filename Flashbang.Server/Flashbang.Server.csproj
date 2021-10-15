@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\Desktop\FiveMServers\BasicDevelopmentServer\resources\[custom]\flashbang\</OutputPath>
+    <OutputPath>..</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,12 +32,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Server">
-      <HintPath>..\..\..\..\Desktop\FiveM C# Things\CitizenFX.Server.dll</HintPath>
+      <HintPath>..\..\..\..\..\ServerApps\fivem\fx-server\citizen\clr2\lib\mono\4.5\ref\CitizenFX.Core.Server.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\FiveM C# Things\newtonsoft-portable\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\..\newton\Bin\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
