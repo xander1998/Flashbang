@@ -13,7 +13,8 @@ namespace Flashbang.Server
     {
         private Config _config = new();
         private PlayerList _playerList;
-            
+        private bool _isOneSyncEnabled => API.GetConvar("onesync", "off") != "off";
+
         public Main()
         {
             _config.Load();
@@ -55,7 +56,19 @@ namespace Flashbang.Server
             flashbangMessage.Damage = _config.Damage;
             flashbangMessage.LethalRadius = _config.LethalRadius;
 
-            TriggerClientEvent("Flashbang:Explode", JsonConvert.SerializeObject(flashbangMessage));
+            if (_isOneSyncEnabled)
+            {
+                List<Player> closestPlayers = GetClosestPlayers(flashbangMessage.Position, _config.MaxUpdateRange);
+
+                foreach (Player player in closestPlayers)
+                {
+                    TriggerClientEvent(player, "Flashbang:Explode", JsonConvert.SerializeObject(flashbangMessage));
+                }
+            }
+            else
+            {
+                TriggerClientEvent("Flashbang:Explode", JsonConvert.SerializeObject(flashbangMessage));
+            }
         }
     }
 }
