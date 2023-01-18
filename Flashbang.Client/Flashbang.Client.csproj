@@ -39,4 +39,12 @@
 
   <Import Project="..\Flashbang.Shared\Flashbang.Shared.projitems" Label="Shared" />
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="G:\FiveM Projects\Forks\flashbang-fork\Flashbang.Client\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="G:\FiveM Projects\Forks\flashbang-fork\Flashbang.Client\.editorconfig" />
+  </ItemGroup>
+
 </Project>

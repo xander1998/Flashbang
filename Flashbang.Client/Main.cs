@@ -11,7 +11,7 @@ namespace Flashbang.Client
     {
         private const string PTFX_DICT = "core";
         private const string PTFX_ASSET = "ent_anim_paparazzi_flash";
-        
+
         private const string WEAPON_FLASHBANG = "WEAPON_FLASHBANG";
         private const string WEAPON_FLASHBANG_MODEL = "w_ex_flashbang";
 
@@ -22,7 +22,7 @@ namespace Flashbang.Client
 
         private const float MAX_CAMERA_SHAKE_AMPLITUDE = 25.0f;
         private const float MAX_CAMERA_SHAKE_AFTER_AMPLITUDE = 18.0f;
-        
+
         private bool _flashbangEquipped = false;
         private float _totalFlashShakeAmp = 0.0f;
         private float _totalAfterShakeAmp = 0.0f;
@@ -44,11 +44,11 @@ namespace Flashbang.Client
         {
             Prop flashbang = (Prop)Entity.FromHandle(propHandle);
             await Delay(1500);
-            
+
             if (!flashbang.Exists()) return;
             Vector3 flashbangPos = flashbang.Position;
             World.AddExplosion(flashbangPos, ExplosionType.ProgramAR, 0f, 1f, null, true, true);
-            
+
             FlashbangMessage flashbangMessage = new();
             flashbangMessage.Position = flashbangPos;
             flashbangMessage.Prop = propHandle;
@@ -244,14 +244,14 @@ namespace Flashbang.Client
 
             Ped ped = Game.PlayerPed;
             int pedHandle = ped.Handle;
-            
+
             bool hit = false;
             int entityHit = 0;
             int result = 1;
             bool playerHit = false;
             Vector3 hitPos = new Vector3();
             Vector3 surfaceNormal = new Vector3();
-            
+
             Vector3 pedPos = ped.Bones[Bone.IK_Head].Position;
             Vector3 pedPos2 = ped.Bones[Bone.SKEL_Head].Position;
 
@@ -304,7 +304,7 @@ namespace Flashbang.Client
                 API.GetShapeTestResult(handle, ref hit, ref hitPos, ref surfaceNormal, ref entityHit);
                 await Delay(0);
             }
-            
+
             playerHit = playerHit || ((result == 2) && (entityHit == pedHandle));
 
             if (faceDistance <= message.Range && playerHit)

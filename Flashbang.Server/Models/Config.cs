@@ -8,7 +8,7 @@ namespace Flashbang.Server.Models
 
         [JsonProperty("stunDuration")]
         public int StunDuration { get; protected set; } = 8;
-        
+
         [JsonProperty("afterStunDuration")]
         public int AfterStunDuration { get; protected set; } = 8;
 
@@ -27,7 +27,7 @@ namespace Flashbang.Server.Models
         public Config Load()
         {
             if (_config != null) return _config;
-            
+
             string json = API.LoadResourceFile(API.GetCurrentResourceName(), "config.json");
             if (string.IsNullOrEmpty(json))
             {
