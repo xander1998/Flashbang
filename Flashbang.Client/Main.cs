@@ -1,97 +1,92 @@
-﻿using System;
+﻿global using CitizenFX.Core;
+global using CitizenFX.Core.Native;
+using Flashbang.Shared;
+using Newtonsoft.Json;
+using System;
 using System.Threading.Tasks;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 
 namespace Flashbang.Client
 {
     public class Main : BaseScript
     {
-        private const string AnimDict = "core";
-        private const string AnimName = "ent_anim_paparazzi_flash";
-        private bool FlashbangEquipped = false;
-        private const float maxShakeAmp = 25.0f;
-        private const float maxAfterShakeAmp = 18.0f;
-        private float totalFlashShakeAmp = 0.0f;
-        private float totalAfterShakeAmp = 0.0f;
-        private int flashTimersRunning = 0;
-        private bool shakeCamActive = false;
-        private int afterTimersRunning = 0;
-        private const string WeaponModel = "w_ex_flashbang";
+        private const string PTFX_DICT = "core";
+        private const string PTFX_ASSET = "ent_anim_paparazzi_flash";
+        
+        private const string WEAPON_FLASHBANG = "WEAPON_FLASHBANG";
+        private const string WEAPON_FLASHBANG_MODEL = "w_ex_flashbang";
 
+        private const string ANIMATION_DICT = "anim@heists@ornate_bank@thermal_charge";
+        private const string ANIMATION_ENTER = "cover_eyes_intro";
+        private const string ANIMATION_COVER_EYES = "cover_eyes_loop";
+        private const string ANIMATION_EXIT = "cover_eyes_exit";
 
-        private string[] Animation = new string[] { "anim@heists@ornate_bank@thermal_charge", "cover_eyes_intro" };
+        private const float MAX_CAMERA_SHAKE_AMPLITUDE = 25.0f;
+        private const float MAX_CAMERA_SHAKE_AFTER_AMPLITUDE = 18.0f;
+        
+        private bool _flashbangEquipped = false;
+        private float _totalFlashShakeAmp = 0.0f;
+        private float _totalAfterShakeAmp = 0.0f;
+        private int _flashTimersRunning = 0;
+        private bool _isCameraShakeEnabled = false;
+        private int _afterTimersRunning = 0;
 
         public Main()
         {
-            EventHandlers.Add("Flashbang:Explode", new Action<float, float, float, int, int, float, int, int, float>(FB_Explode));
-            Tick += FB_Tick;
-            FB_LoadWeaponEntry();
+            API.AddTextEntry("WT_GNADE_FLSH", "Flashbang");
+
+            EventHandlers["Flashbang:Explode"] += new Action<string>(OnFlashbangExplodeAsync);
+
+            Tick += OnFlashbangAsync;
+            // Tick += OnFlashbangDebugAsync;
         }
 
-        private void FB_LoadWeaponEntry()
+        private async void SendFlashbangThrownMessage(int propHandle)
         {
-            if (API.IsWeaponValid(4221696920))
-            {
-                API.AddTextEntry("WT_GNADE_FLSH", "Flashbang");
-            }
-        }
-
-        private async void FB_Thrown(int prop)
-        {
-            Prop flashbang = (Prop)Entity.FromHandle(prop);
+            Prop flashbang = (Prop)Entity.FromHandle(propHandle);
             await Delay(1500);
+            
+            if (!flashbang.Exists()) return;
             Vector3 flashbangPos = flashbang.Position;
             World.AddExplosion(flashbangPos, ExplosionType.ProgramAR, 0f, 1f, null, true, true);
-            TriggerServerEvent("Flashbang:DispatchExplosion", flashbangPos.X, flashbangPos.Y, flashbangPos.Z, prop);
-            flashbang.Delete();
+            
+            FlashbangMessage flashbangMessage = new();
+            flashbangMessage.Position = flashbangPos;
+            flashbangMessage.Prop = propHandle;
+
+            TriggerServerEvent("Flashbang:DispatchExplosion", JsonConvert.SerializeObject(flashbangMessage));
+
+            if (flashbang.Exists())
+                flashbang.Delete();
         }
 
-        private async void drawLine (float x1, float y1, float z1, float x2, float y2, float z2, int r, int g, int b, int a, int t) 
+        private void SetCameraShakeAmplitude(float amp)
         {
-            int current = 0;  
-            while (current <= t)
-             {
-                API.DrawLine(x1, y1, z1, x2, y2, z2, r, g, b, a);
-                await Delay(1);
-                current ++;
-             }
-        }
-
-        private async void cout (string text) 
-        {
-            CitizenFX.Core.Debug.WriteLine(text);
-        }
-
-        private void enableShakeCam (float amp)
-        {
-            if (shakeCamActive)
+            if (_isCameraShakeEnabled)
             {
                 GameplayCamera.ShakeAmplitude = amp;
             }
             else
             {
                 GameplayCamera.Shake(CameraShake.Hand, amp);
-                shakeCamActive = true;
+                _isCameraShakeEnabled = true;
             }
         }
 
-        private async void shakeCamFalloff (float amp) 
+        private async void SetCameraShakeAmplitudeFalloff(float amp)
         {
             float currentAmp = amp;
-            float ampInterval = amp/2;
+            float ampInterval = amp / 2;
             while (currentAmp > 0.0f)
-             {
+            {
                 currentAmp = currentAmp - ampInterval;
                 GameplayCamera.ShakeAmplitude = currentAmp;
                 await Delay(500);
-             }
+            }
             GameplayCamera.StopShaking();
-            shakeCamActive = false;
+            _isCameraShakeEnabled = false;
         }
 
-        private async void disableFiring (int time)
+        private async void DisablePlayerFromUsingWeapons(int time)
         {
             int finTime = Game.GameTime + time;
             while (Game.GameTime < finTime)
@@ -101,234 +96,263 @@ namespace Flashbang.Client
             }
         }
 
-        private float capFlashShakeAmp (float amp)
+        private float ValidateFlashbangCameraShakeAmplitude(float amplitude)
         {
-            if (amp < 0.0f)
+            if (amplitude < 0.0f)
             {
                 return (0.0f);
             }
             else
             {
-                if (amp > maxShakeAmp) 
+                if (amplitude > MAX_CAMERA_SHAKE_AMPLITUDE)
                 {
-                    return (maxShakeAmp);
+                    return (MAX_CAMERA_SHAKE_AMPLITUDE);
                 }
-                else 
+                else
                 {
-                    return (amp);
+                    return (amplitude);
                 }
             }
         }
 
-        private float capAfterShakeAmp (float amp)
+        private float ValidateAfterFlashbangCameraShakeAmplitude(float amplitude)
         {
-            if (amp < 0.0f)
+            if (amplitude < 0.0f)
             {
                 return (0.0f);
             }
             else
             {
-                if (amp > maxAfterShakeAmp) 
+                if (amplitude > MAX_CAMERA_SHAKE_AFTER_AMPLITUDE)
                 {
-                    return (maxAfterShakeAmp);
+                    return (MAX_CAMERA_SHAKE_AFTER_AMPLITUDE);
                 }
-                else 
+                else
                 {
-                    return (amp);
+                    return (amplitude);
                 }
             }
         }
 
-        private async void afterEffect (float shakeAmp, int time)
+        private async void AfterFlashbangEffect(float shakeAmplitude, int duration)
         {
             // Buffs
-            afterTimersRunning++;
-            totalAfterShakeAmp += shakeAmp;
-            enableShakeCam(capAfterShakeAmp(totalAfterShakeAmp));
+            _afterTimersRunning++;
+            _totalAfterShakeAmp += shakeAmplitude;
+            SetCameraShakeAmplitude(ValidateAfterFlashbangCameraShakeAmplitude(_totalAfterShakeAmp));
 
             // Wait
-            await Delay(time);
+            await Delay(duration);
 
             // Debuffs
-            afterTimersRunning--;
-            totalAfterShakeAmp -= shakeAmp;
+            _afterTimersRunning--;
+            _totalAfterShakeAmp -= shakeAmplitude;
 
             // Cleanup
-            if (flashTimersRunning == 0)
+            if (_flashTimersRunning == 0)
             {
-                enableShakeCam(capAfterShakeAmp(totalAfterShakeAmp));
-                if ((afterTimersRunning == 0) && (flashTimersRunning == 0))
+                SetCameraShakeAmplitude(ValidateAfterFlashbangCameraShakeAmplitude(_totalAfterShakeAmp));
+                if ((_afterTimersRunning == 0) && (_flashTimersRunning == 0))
                 {
-                    shakeCamFalloff(totalFlashShakeAmp + shakeAmp);
+                    SetCameraShakeAmplitudeFalloff(_totalFlashShakeAmp + shakeAmplitude);
                     API.AnimpostfxStop("Dont_tazeme_bro");
-                } 
+                }
             }
         }
 
-        private async void flashEffect (float shakeAmp, int time, float afterShakeAmp, int afterTime)
-        {   
+        private async void FlashbangEffect(float shakeAmplitude, int duration, float afterShakeAmplitude, int afterEffectDuration)
+        {
             Ped ped = Game.Player.Character;
 
             // Buffs
-            flashTimersRunning++;
-            totalFlashShakeAmp += shakeAmp;
-            disableFiring(time);
-            enableShakeCam(capFlashShakeAmp(totalFlashShakeAmp));
+            _flashTimersRunning++;
+            _totalFlashShakeAmp += shakeAmplitude;
+            DisablePlayerFromUsingWeapons(duration);
+            SetCameraShakeAmplitude(ValidateFlashbangCameraShakeAmplitude(_totalFlashShakeAmp));
+
+            API.RequestAnimDict(ANIMATION_DICT);
 
             // Animation and screen effect
-            if (flashTimersRunning == 1)
+            if (_flashTimersRunning == 1)
             {
                 API.AnimpostfxPlay("Dont_tazeme_bro", 0, true);
-                await ped.Task.PlayAnimation(Animation[0], Animation[1], -8f, -8f, -1, AnimationFlags.StayInEndFrame | AnimationFlags.UpperBodyOnly | AnimationFlags.AllowRotation, 8f);
-            }            
+                await SetPedAnimationAsync(ped, 1);
+            }
 
             // Wait
-            await Delay(time);
+            await Delay(duration);
+
+            if (!API.IsEntityPlayingAnim(ped.Handle, ANIMATION_DICT, ANIMATION_COVER_EYES, 3))
+                await SetPedAnimationAsync(ped, 2);
 
             // Debuffs
-            flashTimersRunning--;
-            totalFlashShakeAmp -= shakeAmp;
-            enableShakeCam(capFlashShakeAmp(totalFlashShakeAmp));
+            _flashTimersRunning--;
+            _totalFlashShakeAmp -= shakeAmplitude;
+            SetCameraShakeAmplitude(ValidateFlashbangCameraShakeAmplitude(_totalFlashShakeAmp));
 
             // Cleanup
-            if (flashTimersRunning == 0)
+            if (_flashTimersRunning == 0)
             {
-                ped.Task.ClearAnimation(Animation[0], Animation[1]);
-                afterEffect(afterShakeAmp, afterTime);
-            } 
+                AfterFlashbangEffect(afterShakeAmplitude, afterEffectDuration);
+                await SetPedAnimationAsync(ped, 3);
+                await SetPedAnimationAsync(ped, 0);
+            }
+
+            API.RemoveAnimDict(ANIMATION_DICT);
         }
 
-        private async void checkLethalRadius(float lethRange, float x, float y, float z, int damage)
-        {   
-            Ped ped = Game.Player.Character;
-            Vector3 pos = new Vector3(x, y, z);
-            float distance = World.GetDistance(ped.Position, pos);
-
-            //cout("Damage: " + damage.ToString());
-            //cout("Lethal Range: " + lethRange.ToString());
-            //cout("Distance: " + distance.ToString());
-
-            if (distance <= lethRange)
+        private async Task SetPedAnimationAsync(Ped ped, int animationState)
+        {
+            switch (animationState)
             {
-                 API.ApplyDamageToPed(API.GetPlayerPed(-1), damage, false);
-                 cout("Applying Damage Amount: " + damage.ToString());
+                case 1:
+                    await ped.Task.PlayAnimation(ANIMATION_DICT, ANIMATION_ENTER, -8f, -8f, -1, AnimationFlags.StayInEndFrame | AnimationFlags.UpperBodyOnly | AnimationFlags.AllowRotation, 8f);
+                    break;
+                case 2:
+                    await ped.Task.PlayAnimation(ANIMATION_DICT, ANIMATION_COVER_EYES, -8f, -8f, -1, AnimationFlags.StayInEndFrame | AnimationFlags.UpperBodyOnly | AnimationFlags.AllowRotation, 8f);
+                    break;
+                case 3:
+                    await ped.Task.PlayAnimation(ANIMATION_DICT, ANIMATION_EXIT, -8f, -8f, -1, AnimationFlags.StayInEndFrame | AnimationFlags.UpperBodyOnly | AnimationFlags.AllowRotation, 8f);
+                    break;
+                default:
+                    ped.Task.ClearAnimation(ANIMATION_DICT, ANIMATION_EXIT);
+                    ped.Task.ClearAll();
+                    break;
             }
         }
 
-        private async void FB_Explode(float x, float y, float z, int stunTime, int afterTime, float radius, int prop, int damage, float lethalRange)
+        private void ApplyDamageToPedIfInLethalRadius(Ped ped, Vector3 position, float lethalRaduis, int damage)
         {
+            if (ped.IsInRangeOf(position, lethalRaduis))
+            {
+                ped.ApplyDamage(damage);
+            }
+        }
+
+        Vector3 lastPlayerHitReg = Vector3.Zero;
+        Vector3 lastMessagePosition = Vector3.Zero;
+
+        //public async Task OnFlashbangDebugAsync()
+        //{
+        //    if (lastMessagePosition == Vector3.Zero) return;
+        //    API.DrawLine(lastMessagePosition.X, lastMessagePosition.Y, lastMessagePosition.Z, lastPlayerHitReg.X, lastPlayerHitReg.Y, lastPlayerHitReg.Z, 255, 0, 0, 255);
+        //}
+
+        public async void OnFlashbangExplodeAsync(string jsonMessage)
+        {
+            FlashbangMessage message = JsonConvert.DeserializeObject<FlashbangMessage>(jsonMessage);
+
+            Ped ped = Game.PlayerPed;
+            int pedHandle = ped.Handle;
+            
             bool hit = false;
             int entityHit = 0;
             int result = 1;
             bool playerHit = false;
             Vector3 hitPos = new Vector3();
             Vector3 surfaceNormal = new Vector3();
-            Ped ped = Game.Player.Character;
-            int pedHandle = API.PlayerPedId();
-            Vector3 pedPos = API.GetPedBoneCoords(API.PlayerPedId(), 0x62ac, 0, 0, 0);
-            Vector3 pedPos2 = API.GetPedBoneCoords(API.PlayerPedId(), 0x6b52, 0, 0, 0);
-            Vector3 pos = new Vector3(x, y, z);
-            Vector3 hitReg = new Vector3(pedPos.X-x, pedPos.Y-y, pedPos.Z-z); // Richtungsvektor
-            PlayParticles(pos);
+            
+            Vector3 pedPos = ped.Bones[Bone.IK_Head].Position;
+            Vector3 pedPos2 = ped.Bones[Bone.SKEL_Head].Position;
 
-            float distance = World.GetDistance(ped.Position, pos);
-            float faceDistance = World.GetDistance(pedPos, pos);
+            lastMessagePosition = message.Position;
+            Vector3 hitReg = new Vector3(pedPos.X - message.Position.X, pedPos.Y - message.Position.Y, pedPos.Z - message.Position.Z); // Richtungsvektor
+            PlayParticleEffectAtPosition(lastMessagePosition);
+
+            float distance = World.GetDistance(ped.Position, lastMessagePosition);
+            float faceDistance = World.GetDistance(pedPos, lastMessagePosition);
             float distanceSq = distance * distance;
 
-            float effectFalloffMultiplier = 0.02f / (radius / 8.0f); // Radius ~< effectFalloffMultiplier
+            float effectFalloffMultiplier = 0.02f / (message.Range / 8.0f); // Radius ~< effectFalloffMultiplier
             float stunTimeMultiplier = effectFalloffMultiplier * distanceSq; // Distanz ~> effectFalloffMultiplier
             int effectFalloffStunTime;
             int effectFalloffAfterTime;
             float shakeCamAmp = 15.0f;
-            effectFalloffStunTime = (int)(((float)stunTime) * stunTimeMultiplier); // Distanz ~> FalloffStunTime
-            effectFalloffAfterTime = (int)(((float)afterTime) * stunTimeMultiplier);
-            
-            int actualStunTime = (stunTime - effectFalloffStunTime) * 1000;
-            int actualAfterTime =  (afterTime - effectFalloffAfterTime) * 1000;
-            float stunTimeFallOffMultiplier= ((float) actualStunTime) / ((float)(stunTime * 1000));
+            effectFalloffStunTime = (int)(message.StunDuration * stunTimeMultiplier); // Distanz ~> FalloffStunTime
+            effectFalloffAfterTime = (int)(message.AfterStunDuration * stunTimeMultiplier);
+
+            int actualStunTime = (message.StunDuration - effectFalloffStunTime) * 1000;
+            int actualAfterTime = (message.AfterStunDuration - effectFalloffAfterTime) * 1000;
+            float stunTimeFallOffMultiplier = ((float)actualStunTime) / ((float)(message.StunDuration * 1000));
 
             if (actualStunTime <= 0)
             {
                 actualStunTime = 1;
             }
 
-             if (actualAfterTime <= 0)
+            if (actualAfterTime <= 0)
             {
                 actualAfterTime = 1;
             }
 
-            //cout("StunTime: " + actualStunTime.ToString());
-            //cout("AfterTime: " + actualAfterTime.ToString());
-            //drawLine(x, y, z, pedPos.X + (10*hitReg.X), pedPos.Y + (10*hitReg.Y), pedPos.Z + (10*hitReg.Z), 255, 0, 0, 255 ,1000);
-            //drawLine(x, y, z, pedPos2.X + (10*hitReg.X), pedPos2.Y + (10*hitReg.Y), pedPos2.Z + (10*hitReg.Z), 255, 0, 0, 255 ,1000);
-            int handle = 0;
-            handle = API.StartShapeTestLosProbe(x, y, z, pedPos.X + (10*hitReg.X), pedPos.Y + (10*hitReg.Y), pedPos.Z + (10*hitReg.Z), 0b0000_0000_1001_1111, prop, 0b0000_0000_0000_0100);
-            
+            lastPlayerHitReg = new Vector3(pedPos2.X + (10 * hitReg.X), pedPos2.Y + (10 * hitReg.Y), pedPos2.Z + (10 * hitReg.Z));
+
+            int handle = API.StartShapeTestLosProbe(lastMessagePosition.X, lastMessagePosition.Y, lastMessagePosition.Z, lastPlayerHitReg.X, lastPlayerHitReg.Y, lastPlayerHitReg.Z, 0b0000_0000_1001_1111, message.Prop, 0b0000_0000_0000_0100);
+
             while (result == 1)
             {
                 result = API.GetShapeTestResult(handle, ref hit, ref hitPos, ref surfaceNormal, ref entityHit);
                 await Delay(0);
             }
-            playerHit = (result == 2) && (entityHit == API.GetPlayerPed(-1));
 
-            handle = 0;
-            handle = API.StartShapeTestLosProbe(x, y, z, pedPos2.X + (10*hitReg.X), pedPos2.Y + (10*hitReg.Y), pedPos2.Z + (10*hitReg.Z), 0b0000_0000_1001_1111, prop, 0b0000_0000_0000_0100);
-            
+            playerHit = (result == 2) && (entityHit == pedHandle);
+
+            handle = API.StartShapeTestLosProbe(lastMessagePosition.X, lastMessagePosition.Y, lastMessagePosition.Z, lastPlayerHitReg.X, lastPlayerHitReg.Y, lastPlayerHitReg.Z, 0b0000_0000_1001_1111, message.Prop, 0b0000_0000_0000_0100);
+
             while (handle == 1)
             {
                 API.GetShapeTestResult(handle, ref hit, ref hitPos, ref surfaceNormal, ref entityHit);
                 await Delay(0);
             }
-            playerHit = playerHit || ((result == 2) && (entityHit == API.GetPlayerPed(-1)));
+            
+            playerHit = playerHit || ((result == 2) && (entityHit == pedHandle));
 
-            if ((faceDistance <= radius) && playerHit)
+            if (faceDistance <= message.Range && playerHit)
             {
-                checkLethalRadius(lethalRange, x, y, z, damage);
-
-                // https://wiki.gtanet.work/index.php?title=Screen_Effects
-                //Screen.Effects.Start(ScreenEffect.DontTazemeBro, 0, true);
-                
-                flashEffect(shakeCamAmp * stunTimeFallOffMultiplier, actualStunTime, 10f * stunTimeFallOffMultiplier, actualAfterTime);
+                ApplyDamageToPedIfInLethalRadius(ped, lastMessagePosition, message.LethalRadius, message.Damage);
+                FlashbangEffect(shakeCamAmp * stunTimeFallOffMultiplier, actualStunTime, 10f * stunTimeFallOffMultiplier, actualAfterTime);
             }
         }
 
-        private async Task FB_Tick()
+        private async Task OnFlashbangAsync()
         {
-            if (!FlashbangEquipped)
+            Ped playerPed = Game.PlayerPed;
+
+            if (!_flashbangEquipped)
             {
-                if (Game.Player.Character.Weapons.Current.Hash == (WeaponHash)API.GetHashKey("WEAPON_FLASHBANG"))
+                if (playerPed.Weapons.Current.Hash == (WeaponHash)API.GetHashKey(WEAPON_FLASHBANG))
                 {
-                    FlashbangEquipped = true;
+                    _flashbangEquipped = true;
                 }
-            } else
+            }
+            else
             {
-                if (Game.Player.Character.IsShooting)
+                if (playerPed.IsShooting)
                 {
-                    FlashbangEquipped = false;
+                    _flashbangEquipped = false;
 
                     await Delay(100);
 
-                    Vector3 pos = Game.Player.Character.Position;
-                    int handle = API.GetClosestObjectOfType(pos.X, pos.Y, pos.Z, 50f, (uint)API.GetHashKey(WeaponModel), false, false, false);
+                    Vector3 pos = playerPed.Position;
+                    int objectHandle = API.GetClosestObjectOfType(pos.X, pos.Y, pos.Z, 50f, (uint)API.GetHashKey(WEAPON_FLASHBANG_MODEL), false, false, false);
 
-                    if (handle != 0)
+                    if (objectHandle != 0)
                     {
-                        FB_Thrown(handle);
+                        SendFlashbangThrownMessage(objectHandle);
                     }
                 }
             }
-            await Task.FromResult(0);
         }
 
-        private async void PlayParticles(Vector3 pos)
+        private async void PlayParticleEffectAtPosition(Vector3 pos)
         {
-            API.RequestNamedPtfxAsset(AnimDict);
-            while (!API.HasNamedPtfxAssetLoaded(AnimDict))
+            API.RequestNamedPtfxAsset(PTFX_DICT);
+            while (!API.HasNamedPtfxAssetLoaded(PTFX_DICT))
             {
                 await Delay(0);
             }
-            API.UseParticleFxAssetNextCall(AnimDict);
-            API.StartParticleFxLoopedAtCoord(AnimName, pos.X, pos.Y, pos.Z, 0f, 0f, 0f, 25f, false, false, false, false);
+            API.UseParticleFxAssetNextCall(PTFX_DICT);
+            API.StartParticleFxLoopedAtCoord(PTFX_ASSET, pos.X, pos.Y, pos.Z, 0f, 0f, 0f, 25f, false, false, false, false);
         }
     }
 }
