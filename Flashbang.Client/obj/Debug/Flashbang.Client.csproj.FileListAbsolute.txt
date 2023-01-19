@@ -3,3 +3,13 @@ G:\FiveM Projects\Forks\Flashbang\Flashbang.Client\obj\Debug\Flashbang.Client.Ge
 G:\FiveM Projects\Forks\Flashbang\Flashbang.Client\obj\Debug\Flashbang.Client.AssemblyInfoInputs.cache
 G:\FiveM Projects\Forks\Flashbang\Flashbang.Client\obj\Debug\Flashbang.Client.AssemblyInfo.cs
 G:\FiveM Projects\Forks\Flashbang\Flashbang.Client\obj\Debug\Flashbang.Client.csproj.CoreCompileInputs.cache
+G:\FiveM Projects\Forks\flashbang-fork\Flashbang.Client\bin\Debug\Flashbang.Client.net.dll
+G:\FiveM Projects\Forks\flashbang-fork\Flashbang.Client\bin\Debug\Newtonsoft.Json.dll
+G:\FiveM Projects\Forks\flashbang-fork\Flashbang.Client\bin\Debug\Newtonsoft.Json.xml
+G:\FiveM Projects\Forks\flashbang-fork\Flashbang.Client\obj\Debug\Flashbang.Client.csproj.AssemblyReference.cache
+G:\FiveM Projects\Forks\flashbang-fork\Flashbang.Client\obj\Debug\Flashbang.Client.GeneratedMSBuildEditorConfig.editorconfig
+G:\FiveM Projects\Forks\flashbang-fork\Flashbang.Client\obj\Debug\Flashbang.Client.AssemblyInfoInputs.cache
+G:\FiveM Projects\Forks\flashbang-fork\Flashbang.Client\obj\Debug\Flashbang.Client.AssemblyInfo.cs
+G:\FiveM Projects\Forks\flashbang-fork\Flashbang.Client\obj\Debug\Flashbang.Client.csproj.CoreCompileInputs.cache
+G:\FiveM Projects\Forks\flashbang-fork\Flashbang.Client\obj\Debug\Flashbang.Client.csproj.CopyComplete
+G:\FiveM Projects\Forks\flashbang-fork\Flashbang.Client\obj\Debug\Flashbang.Client.net.dll

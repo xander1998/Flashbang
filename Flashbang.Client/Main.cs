@@ -35,9 +35,18 @@ namespace Flashbang.Client
             API.AddTextEntry("WT_GNADE_FLSH", "Flashbang");
 
             EventHandlers["Flashbang:Explode"] += new Action<string>(OnFlashbangExplodeAsync);
+            EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
+
+            API.RequestAnimDict(ANIMATION_DICT);
 
             Tick += OnFlashbangAsync;
             // Tick += OnFlashbangDebugAsync;
+        }
+
+        private void OnResourceStop(string obj)
+        {
+            if (API.GetCurrentResourceName() != obj) return;
+            API.RemoveAnimDict(ANIMATION_DICT);
         }
 
         private async void SendFlashbangThrownMessage(int propHandle)
@@ -170,8 +179,6 @@ namespace Flashbang.Client
             DisablePlayerFromUsingWeapons(duration);
             SetCameraShakeAmplitude(ValidateFlashbangCameraShakeAmplitude(_totalFlashShakeAmp));
 
-            API.RequestAnimDict(ANIMATION_DICT);
-
             // Animation and screen effect
             if (_flashTimersRunning == 1)
             {
@@ -197,8 +204,6 @@ namespace Flashbang.Client
                 await SetPedAnimationAsync(ped, 3);
                 await SetPedAnimationAsync(ped, 0);
             }
-
-            API.RemoveAnimDict(ANIMATION_DICT);
         }
 
         private async Task SetPedAnimationAsync(Ped ped, int animationState)
