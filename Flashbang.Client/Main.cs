@@ -37,10 +37,8 @@ namespace Flashbang.Client
             EventHandlers["Flashbang:Explode"] += new Action<string>(OnFlashbangExplodeAsync);
             EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
 
-            API.RequestAnimDict(ANIMATION_DICT);
-
             Tick += OnFlashbangAsync;
-            // Tick += OnFlashbangDebugAsync;
+            //Tick += OnFlashbangDebugAsync;
         }
 
         private void OnResourceStop(string obj)
@@ -208,6 +206,8 @@ namespace Flashbang.Client
 
         private async Task SetPedAnimationAsync(Ped ped, int animationState)
         {
+            API.RequestAnimDict(ANIMATION_DICT);
+            
             switch (animationState)
             {
                 case 1:
