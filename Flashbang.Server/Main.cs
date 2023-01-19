@@ -1,31 +1,34 @@
-﻿using System;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Newtonsoft.Json;
+﻿global using CitizenFX.Core;
+global using CitizenFX.Core.Native;
 using Flashbang.Server.Models;
+using Flashbang.Shared;
+using Newtonsoft.Json;
+using System;
 
 namespace Flashbang.Server
 {
     public class Main : BaseScript
     {
-        private Config config = new Config();
-
+        private Config _config = new();
+        
         public Main()
         {
-            EventHandlers.Add("Flashbang:DispatchExplosion", new Action<float, float, float, int>(FB_DispatchExplosion));
-            LoadConfig();
+            _config.Load();
+
+            EventHandlers["Flashbang:DispatchExplosion"] += new Action<string>(OnFlashbangMessageAsync);
         }
 
-        private void LoadConfig()
+        private void OnFlashbangMessageAsync(string jsonMessage)
         {
-            string resourceName = API.GetCurrentResourceName();
-            string json = API.LoadResourceFile(resourceName, "config.json");
-            config = JsonConvert.DeserializeObject<Config>(json);
-        }
-
-        private void FB_DispatchExplosion(float x, float y, float z, int prop)
-        {     
-            TriggerClientEvent("Flashbang:Explode", x, y, z, config.StunTime, config.AfterTime, config.Range, prop,config.Damage, config.LethalRange);
+            FlashbangMessage flashbangMessage = JsonConvert.DeserializeObject<FlashbangMessage>(jsonMessage);
+            flashbangMessage.StunDuration = _config.StunDuration;
+            flashbangMessage.AfterStunDuration = _config.AfterStunDuration;
+            flashbangMessage.Range = _config.Range;
+            flashbangMessage.Damage = _config.Damage;
+            flashbangMessage.LethalRadius = _config.LethalRadius;
+            
+            string jsonFlashbangMessage = JsonConvert.SerializeObject(flashbangMessage);
+            TriggerClientEvent("Flashbang:Explode", jsonFlashbangMessage);
         }
     }
 }

@@ -1,0 +1,8 @@
+{
+	"stunDuration": 8,
+	"afterStunDuration": 8,
+	"range": 20.0,
+	"damage": 25,
+	"lethalRadius": 1.6,
+	"maxUpdateRange": 50.0
+}
