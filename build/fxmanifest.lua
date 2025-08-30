@@ -1,20 +1,22 @@
+game "gta5"
+fx_version "cerulean"
+
+author "Xander1998 (X. Cross) https://github.com/xander1998"
+description "Flashbang script for FiveM"
+
 --[[
 	Scripted By: Xander1998 (X. Cross)
-	Modified By: Eddie (Eddbox LP)
+	Modified By: Eddie (Eddbox LP) & Local9
 	Model Ported & META's redone By: xRxExTxRxOx
 --]]
 
-resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
 
 ---------------------------------------------------------------------------
 -- INCLUDED FILES
 ---------------------------------------------------------------------------
 files {
-	"data/loadouts.meta",
-	"data/weaponarchetypes.meta",
-	"data/weaponanimations.meta",
-	"data/pedpersonality.meta",
-	"data/weapons.meta"
+	"data/**/*",
+	"client/Newtonsoft.Json.dll",
 }
 
 ---------------------------------------------------------------------------
@@ -30,5 +32,5 @@ data_file "PED_PERSONALITY_FILE" "data/pedpersonality.meta"
 ---------------------------------------------------------------------------
 -- SCRIPTS
 ---------------------------------------------------------------------------
-server_script "Flashbang.Server.net.dll"
-client_script "Flashbang.Client.net.dll"
+server_script "server/Flashbang.Server.net.dll"
+client_script "client/Flashbang.Client.net.dll"
